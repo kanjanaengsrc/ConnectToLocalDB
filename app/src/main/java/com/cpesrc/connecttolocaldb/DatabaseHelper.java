@@ -9,14 +9,40 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
-    private static final String DB_NAME = "Test.db";
+    //Database configuration
+    private static final String DB_NAME = "Registration.db";
     private static final int DB_VERSION = 1;
     private static final String TB_NAME = "Users";
 
-    private static final String USER_ID = "userID";
-    private static final String USERNAME = "username";
-    private static final String PASSWORD = "password";
-    private static final String PHOTO_PATH = "photoPath";
+    //Table schema
+    private static final String uid = "uid";
+    private static final String prefix = "prefix";
+    private static final String fullname = "fullname";
+    private static final String studentid = "studentid";
+    private static final String major = "major";
+    private static final String birthdate = "birthdate";
+    private static final String note = "note";
+
+/*    CREATE TABLE Users (
+      uid INTEGER PRIMARY KEY,
+      prefix text NULL,
+      fullname text NULL,
+      studentid text NULL,
+      major text NULL,
+      birthdate text NULL,
+      note text NULL
+    )*/
+    //create table query
+    public final String create_sql = "CREATE TABLE " + TB_NAME +
+            "(" +
+            uid + " integer primary key," +
+            prefix + " text, " +
+            fullname + " text, " +
+            studentid + " text, " +
+            major + " text, " +
+            birthdate + " text, " +
+            note + " text " +
+            ")";
 
     public DatabaseHelper(@Nullable Context context, @Nullable String name, @Nullable SQLiteDatabase.CursorFactory factory, Integer version) {
         super(context, DB_NAME, null, DB_VERSION);
@@ -25,20 +51,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     @Override
-    public void onCreate(SQLiteDatabase db) {
-        String create_sql = "CREATE TABLE " + TB_NAME +
-                "(" +
-                    USER_ID + " integer primary key," +
-                    USERNAME + " text, " +
-                    PASSWORD + " text, " +
-                    PHOTO_PATH + " text" +
-                ")";
+    public void onCreate(SQLiteDatabase db) { //it's called when there is no db and the app needs one.
         Log.d("QUERY",create_sql);
         db.execSQL(create_sql);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-
+        db.execSQL("DROP TABLE IF EXISTS " + TB_NAME);
+        onCreate(db);
     }
 }
